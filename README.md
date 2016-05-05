@@ -7,6 +7,11 @@
 ### Installing passport-trademe
 ```
   [sudo] npm install passport-trademe
+  
+  // or for this updated FORK install like this:
+  // where 1.0.0.1 = release number. Look for the latest release from above
+  npm install https://github.com/tealdit/passport-trademe/archive/1.0.0.1.tar.gz --save
+  
 ```
 
 ## Motivation
