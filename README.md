@@ -1,6 +1,6 @@
 # passport-trademe
 
-[Trade Me](www.trademe.co.nz) authentication strategy for [Passport](http://passportjs.org/).
+[Trade Me](http://www.trademe.co.nz) authentication strategy for [Passport](http://passportjs.org/).
 
 ## Installation
 
@@ -95,4 +95,7 @@ Use to protect something ...
 		} );
 ```
 
-#### Author: [Cleave Pokotea](http://www.tumunu.com)
+## Authors: 
+
+* [Cleave Pokotea](https://github.com/Tumunu)
+* [Damodar Bashyal](http://dltr.org)
