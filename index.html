@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Passport-trademe by tealdit</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Passport-trademe</h1>
+      <h2 class="project-tagline">Trade Me authentication strategy for Passport forked from Tumunu/passport-trademe</h2>
+      <a href="https://github.com/tealdit/passport-trademe" class="btn">View on GitHub</a>
+      <a href="https://github.com/tealdit/passport-trademe/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/tealdit/passport-trademe/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="passport-trademe" class="anchor" href="#passport-trademe" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>passport-trademe</h1>
+
+<p><a href="http://www.trademe.co.nz">Trade Me</a> authentication strategy for <a href="http://passportjs.org/">Passport</a>.</p>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h2>
+
+<h3>
+<a id="installing-passport-trademe" class="anchor" href="#installing-passport-trademe" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installing passport-trademe</h3>
+
+<pre><code>  // if you want to install original repo
+  [sudo] npm install passport-trademe
+
+  // or for this updated FORK install like this:
+  // where 1.0.0.1 = {{release number}}. Look for the latest release from above
+  npm install https://github.com/tealdit/passport-trademe/archive/1.0.0.1.tar.gz --save
+
+</code></pre>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>Very simple ...</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> express <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>express<span class="pl-pds">'</span></span>)
+    , session <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>express-session<span class="pl-pds">'</span></span>)
+    , passport <span class="pl-k">=</span> <span class="pl-c1">require</span>( <span class="pl-s"><span class="pl-pds">'</span>passport<span class="pl-pds">'</span></span> )
+    , TrademeStrategy <span class="pl-k">=</span> <span class="pl-c1">require</span>( <span class="pl-s"><span class="pl-pds">'</span>passport-trademe<span class="pl-pds">'</span></span> ).<span class="pl-smi">Strategy</span>
+    , trademeConfig <span class="pl-k">=</span> <span class="pl-c1">require</span>( <span class="pl-s"><span class="pl-pds">'</span>./keys/trademeConfig<span class="pl-pds">'</span></span> )
+    , app <span class="pl-k">=</span> <span class="pl-en">express</span>()
+    ;
+
+    <span class="pl-k">...</span> 
+
+<span class="pl-smi">passport</span>.<span class="pl-en">use</span>(<span class="pl-k">new</span> <span class="pl-en">TrademeStrategy</span>({
+        consumerKey         <span class="pl-k">:</span> <span class="pl-smi">trademeConfig</span>.<span class="pl-smi">consumerKey</span>
+        , consumerSecret    <span class="pl-k">:</span> <span class="pl-smi">trademeConfig</span>.<span class="pl-smi">consumerSecret</span>
+        , callbackURL       <span class="pl-k">:</span> <span class="pl-smi">trademeConfig</span>.<span class="pl-smi">callbackURL</span>
+    }
+    , <span class="pl-k">function</span>( <span class="pl-smi">token</span>, <span class="pl-smi">tokenSecret</span>, <span class="pl-smi">profile</span>, <span class="pl-smi">done</span> ) {
+        <span class="pl-smi">profile</span>.<span class="pl-smi">trademe_token</span> <span class="pl-k">=</span> token;
+        <span class="pl-smi">profile</span>.<span class="pl-smi">trademe_token_secret</span> <span class="pl-k">=</span> tokenSecret;
+        <span class="pl-k">return</span> <span class="pl-en">done</span>(<span class="pl-c1">null</span>, profile);
+    }
+));
+
+    <span class="pl-k">...</span>
+
+    <span class="pl-smi">app</span>.<span class="pl-en">configure</span>( <span class="pl-k">function</span>() {
+        <span class="pl-smi">app</span>.<span class="pl-en">use</span>( <span class="pl-smi">passport</span>.<span class="pl-en">initialize</span>() );
+        <span class="pl-smi">app</span>.<span class="pl-en">use</span>( <span class="pl-smi">passport</span>.<span class="pl-en">session</span>() );
+    } );</pre></div>
+
+<h3>
+<a id="content-of-keystrademeconfigjs" class="anchor" href="#content-of-keystrademeconfigjs" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Content of ./keys/trademeConfig.js</h3>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-c">/**</span>
+<span class="pl-c"> * Expose constructors.</span>
+<span class="pl-c"> */</span>
+<span class="pl-k">var</span> apiBaseUrl      <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>https://api.trademe.co.nz/v1/<span class="pl-pds">'</span></span>;
+<span class="pl-k">var</span> oAuthBaseUrl    <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>https://secure.trademe.co.nz/Oauth/<span class="pl-pds">'</span></span>;
+
+<span class="pl-k">var</span> env <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>staging<span class="pl-pds">'</span></span>;
+<span class="pl-k">switch</span> (env){
+    <span class="pl-k">case</span> <span class="pl-s"><span class="pl-pds">'</span>staging<span class="pl-pds">'</span></span><span class="pl-k">:</span>
+        apiBaseUrl      <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>https://api.tmsandbox.co.nz/v1/<span class="pl-pds">'</span></span>;
+        oAuthBaseUrl    <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>https://secure.tmsandbox.co.nz/Oauth/<span class="pl-pds">'</span></span>;
+        <span class="pl-k">break</span>;
+    <span class="pl-k">default</span><span class="pl-k">:</span>
+}
+<span class="pl-c1">module</span>.<span class="pl-smi">exports</span> <span class="pl-k">=</span> {
+    consumerKey     <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>E11122CC33C3F159ADF1CB1B6217<span class="pl-pds">'</span></span>,
+    consumerSecret  <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>F33456645479B111B44386EC085A7C<span class="pl-pds">'</span></span>,
+    apiBaseUrl      <span class="pl-k">:</span> apiBaseUrl,
+    oAuthBaseUrl    <span class="pl-k">:</span> oAuthBaseUrl,
+    callbackURL     <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>http://127.0.0.1:3000/auth/trademe/callback<span class="pl-pds">'</span></span>
+};</pre></div>
+
+<p>Define you "conversation" routes ...</p>
+
+<div class="highlight highlight-source-js"><pre>    <span class="pl-smi">app</span>.<span class="pl-en">get</span>( <span class="pl-s"><span class="pl-pds">'</span>/auth/trademe<span class="pl-pds">'</span></span>
+        , <span class="pl-smi">passport</span>.<span class="pl-en">authenticate</span>( <span class="pl-s"><span class="pl-pds">'</span>trademe<span class="pl-pds">'</span></span>
+            , { 
+                <span class="pl-c">// Add the scope of your application here</span>
+                scope<span class="pl-k">:</span> [ <span class="pl-s"><span class="pl-pds">'</span>MyTradeMeRead<span class="pl-pds">'</span></span>
+                    , <span class="pl-s"><span class="pl-pds">'</span>MyTradeMeWrite<span class="pl-pds">'</span></span>
+                    , <span class="pl-s"><span class="pl-pds">'</span>BiddingAndBuying<span class="pl-pds">'</span></span> ] 
+            } 
+        )
+        , <span class="pl-k">function</span>( <span class="pl-smi">req</span>, <span class="pl-smi">res</span> ) {
+            <span class="pl-c">// Nothing to do here. The "conversation" will end at the callback route.</span>
+        } );
+
+    <span class="pl-smi">app</span>.<span class="pl-en">get</span>( <span class="pl-s"><span class="pl-pds">'</span>/auth/trademe/callback<span class="pl-pds">'</span></span> 
+        , <span class="pl-smi">passport</span>.<span class="pl-en">authenticate</span>( <span class="pl-s"><span class="pl-pds">'</span>trademe<span class="pl-pds">'</span></span> 
+            , {
+                failureRedirect<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>/login<span class="pl-pds">'</span></span>
+            }
+        )
+        , <span class="pl-k">function</span>( <span class="pl-smi">req</span>, <span class="pl-smi">res</span> ) {
+            <span class="pl-smi">res</span>.<span class="pl-en">redirect</span>( <span class="pl-s"><span class="pl-pds">'</span>/<span class="pl-pds">'</span></span> );
+        } );</pre></div>
+
+<p>Use to protect something ...</p>
+
+<div class="highlight highlight-source-js"><pre>    <span class="pl-k">function</span> ensureAuthenicated = <span class="pl-k">function</span>( <span class="pl-smi">req</span>, <span class="pl-smi">res</span>, <span class="pl-smi">next</span> ) {
+        <span class="pl-k">if</span> ( <span class="pl-smi">req</span>.<span class="pl-en">isAuthenticated</span>() ) { 
+            <span class="pl-k">return</span> <span class="pl-en">next</span>(); 
+        }
+        <span class="pl-smi">res</span>.<span class="pl-en">redirect</span>( <span class="pl-s"><span class="pl-pds">'</span>/login<span class="pl-pds">'</span></span> )
+    }
+
+    <span class="pl-k">...</span>
+
+    <span class="pl-smi">app</span>.<span class="pl-en">get</span>( <span class="pl-s"><span class="pl-pds">'</span>/someProtectedResource<span class="pl-pds">'</span></span>
+        , ensureAuthenticated
+        , <span class="pl-k">function</span> ( <span class="pl-smi">req</span>, <span class="pl-smi">res</span> ) {
+            <span class="pl-smi">res</span>.<span class="pl-en">redirect</span>( <span class="pl-s"><span class="pl-pds">'</span>/<span class="pl-pds">'</span></span> );
+        } );</pre></div>
+
+<h2>
+<a id="authors" class="anchor" href="#authors" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Authors:</h2>
+
+<ul>
+<li><a href="https://github.com/Tumunu">Cleave Pokotea</a></li>
+<li><a href="http://dltr.org">Damodar Bashyal</a></li>
+</ul>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/tealdit/passport-trademe">Passport-trademe</a> is maintained by <a href="https://github.com/tealdit">tealdit</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
