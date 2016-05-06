@@ -27,10 +27,10 @@ Very simple ...
 		
 	...
 	
-	var trademeKey = require( './keys/trademeKey' );
+	var trademeConfig = require( './keys/trademeConfig' );
 	passport.use(new TrademeStrategy( {
-		consumerKey: trademeKey.consumerKey
-		, consumerSecret: trademeKey.consumerSecret
+		consumerKey: trademeConfig.consumerKey
+		, consumerSecret: trademeConfig.consumerSecret
 		, callbackURL: app.get( 'site-url' ) + '/auth/trademe/callback'
 	}
 	, function( token, tokenSecret, profile, done ) {
@@ -47,6 +47,31 @@ Very simple ...
 		app.use( passport.session() );
 		app.use( app.router );
 	} );
+```
+
+### Content of ./keys/trademeConfig.js
+```js
+/**
+ * Expose constructors.
+ */
+var apiBaseUrl      = 'https://api.trademe.co.nz/v1/';
+var oAuthBaseUrl    = 'https://secure.trademe.co.nz/Oauth/';
+
+var env = 'staging';
+switch (env){
+    case 'staging':
+        apiBaseUrl      = 'https://api.tmsandbox.co.nz/v1/';
+        oAuthBaseUrl    = 'https://secure.tmsandbox.co.nz/Oauth/';
+        break;
+    default:
+}
+module.exports = {
+    consumerKey     : 'E11122CC33C3F159ADF1CB1B6217',
+    consumerSecret  : 'F33456645479B111B44386EC085A7C',
+    apiBaseUrl      : apiBaseUrl,
+    oAuthBaseUrl    : oAuthBaseUrl,
+    callbackURL     : 'http://127.0.0.1:3000/auth/trademe/callback'
+};
 ```
 
 Define you "conversation" routes ...
