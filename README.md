@@ -6,46 +6,47 @@
 
 ### Installing passport-trademe
 ```
+  // if you want to install original repo
   [sudo] npm install passport-trademe
   
   // or for this updated FORK install like this:
-  // where 1.0.0.1 = release number. Look for the latest release from above
+  // where 1.0.0.1 = {{release number}}. Look for the latest release from above
   npm install https://github.com/tealdit/passport-trademe/archive/1.0.0.1.tar.gz --save
   
 ```
-
-## Motivation
-Fame, fortune ... free beer.  
 
 ## Usage
 
 Very simple ...
 
 ``` js
-	var passport = require( 'passport' )		
-		, TrademeStrategy = require( 'passport-trademe' ).Strategy
-		
-	...
-	
-	var trademeConfig = require( './keys/trademeConfig' );
-	passport.use(new TrademeStrategy( {
-		consumerKey: trademeConfig.consumerKey
-		, consumerSecret: trademeConfig.consumerSecret
-		, callbackURL: app.get( 'site-url' ) + '/auth/trademe/callback'
-	}
-	, function( token, tokenSecret, profile, done ) {
-	
-		...
-		
-		}
-	) );
+var express = require('express')
+    , session = require('express-session')
+    , passport = require( 'passport' )
+    , TrademeStrategy = require( 'passport-trademe' ).Strategy
+    , trademeConfig = require( './keys/trademeConfig' )
+    , app = express()
+    ;
+    
+    ... 
+    
+passport.use(new TrademeStrategy({
+        consumerKey         : trademeConfig.consumerKey
+        , consumerSecret    : trademeConfig.consumerSecret
+        , callbackURL       : trademeConfig.callbackURL
+    }
+    , function( token, tokenSecret, profile, done ) {
+        profile.trademe_token = token;
+        profile.trademe_token_secret = tokenSecret;
+        return done(null, profile);
+    }
+));
 	
 	...
 	
 	app.configure( function() {
 		app.use( passport.initialize() );
 		app.use( passport.session() );
-		app.use( app.router );
 	} );
 ```
 
