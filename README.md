@@ -27,7 +27,7 @@ var express = require('express')
     , session = require('express-session')
     , passport = require( 'passport' )
     , TrademeStrategy = require( 'passport-trademe' ).Strategy
-    , trademeConfig = require( './keys/trademeConfig' )
+    , trademeConfig = require( './configs/trademeConfig' )
     , app = express()
     ;
     
@@ -53,7 +53,7 @@ passport.use(new TrademeStrategy({
 	} );
 ```
 
-### Content of ./keys/trademeConfig.js
+### Content of ./configs/trademeConfig.js
 ```js
 /**
  * Expose constructors.
